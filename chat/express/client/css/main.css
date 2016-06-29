@@ -1,0 +1,94 @@
+body {
+  height: 300px;
+}
+body * {
+  box-sizing: border-box;
+}
+.container {
+  width: 100%;
+  height: 100%;
+}
+.container .message-box {
+  width: 60%;
+  height: 100%;
+  float: left;
+  padding: 5px;
+  background-color: #cccccc;
+  border: 1px solid #888888;
+}
+.container .message-box .all-messages {
+  width: 100%;
+  height: 90%;
+  overflow-y: auto;
+  word-wrap: break-word;
+}
+.container .message-box .send-message {
+  width: 100%;
+  height: 10%;
+  overflow: hidden;
+}
+.container .message-box .send-message input {
+  height: 100%;
+}
+.container .message-box .send-message input:nth-child(1) {
+  width: 85%;
+  float: left;
+}
+.container .message-box .send-message input:nth-child(2) {
+  float: right;
+  width: 15%;
+}
+.container .users-list {
+  float: right;
+  width: 20%;
+  height: 100%;
+  padding: 5px;
+  background-color: #BBBBBB;
+  border: 1px solid #666666;
+  word-wrap: break-word;
+}
+.container .users-list .user {
+  color: black;
+  cursor: pointer;
+}
+.container .users-list .user.selected {
+  background-color: #008800;
+}
+.container .users-list .user:even {
+  background-color: #FFFFFF;
+}
+.container .users-list .user:odd {
+  background-color: #CCCCCC;
+}
+.container .rooms-list {
+  float: right;
+  width: 20%;
+  height: 100%;
+  padding: 5px;
+  background-color: #BBBBBB;
+  border: 1px solid #666666;
+  word-wrap: break-word;
+}
+.container .rooms-list .room {
+  color: black;
+  cursor: pointer;
+  min-height: 30px;
+  padding: 5px;
+}
+.container .rooms-list .room.selected {
+  background-color: #008800;
+}
+.container .rooms-list .room:even {
+  background-color: #FFFFFF;
+}
+.container .rooms-list .room:odd {
+  background-color: #CCCCCC;
+}
+.container .rooms-list .room button {
+  float: right;
+  cursor: pointer;
+}
+.container .tools {
+  float: right;
+  margin-top: 10px;
+}

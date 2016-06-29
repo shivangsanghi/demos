@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript" src="jquery-2.1.1.min.js"></script>
+	<script type="text/javascript">
+	
+	window.onload = function(){		
+		var canvas1 = document.getElementById('canvas1');
+		var context1 = canvas1.getContext('2d');
+		var canvas2 = document.getElementById('canvas2');
+		var context2 = canvas2.getContext('2d');
+		var scale = 1;
+		var imageW = 0;//width of image
+		var imageH = 0;//height of image
+		var pixelW = 0;//number of element of imagedata in each row
+
+		var image_obj = new Image(); 
+		image_obj.onload = function(){
+			imageW = image_obj.width;
+			imageH = image_obj.height;
+			pixelW = imageW*4;//multiplied by 4 because imagedata contains 4 entry for each pixel
+			canvas1.width = imageW;
+			canvas1.height = imageH;
+			canvas2.width = imageW*scale;
+			canvas2.height = imageH*scale;
+
+
+
+			context1.drawImage(image_obj,0,0);
+			var arr = context1.getImageData(0, 0, imageW, imageH);
+
+			//var newImage = context2.createImageData(canvas2.width, canvas2.height);		    
+			var newImage = context2.createImageData(canvas2.width, canvas2.height);		    
+		    
+		    
+		    var pixels = arr.data;		
+
+			/*If there are 5 colors then we have to first calculate the distance*/			
+			var minDist = 200;
+			var colorsRequired = 5;
+			var colorsArr = [];
+			var colorsArrGroup = [];
+			var nearColorMaxDiff = 100;
+			/*Creating a array of color whose alpha channel not 0*/
+			for(var j = 0; j < pixels.length; j+=4)
+			{
+				var r = pixels[j];
+		        var g = pixels[j + 1];
+		        var b = pixels[j + 2];
+		        var a = pixels[j + 3];	
+		        if(a>0)
+			    	colorsArr.push({r:r,g:g,b:b,a:a});
+		    }					    
+		    //colorsArr.sort(function(a, b){return getDistance({r:a.r,g:a.g,b:a.b},{r:b.r,g:b.g,b:b.b})});
+		    
+			/*grouping colors with count*/				    
+			for(var i = 0; i < colorsArr.length-1; i++)
+			{
+				var temp = [];
+				var count = 1;
+				temp.push(colorsArr[i]);				
+				for(var j = i+1; j < colorsArr.length; j++){
+					if(isColorSame(colorsArr[i],colorsArr[j])){
+						count++;						
+					}			
+					else{
+						break;						
+					}		
+				}
+				i += count;
+				colorsArrGroup.push({obj:colorsArr[i],count:count});				
+		    }
+		    /*sorting colors according to count in desending order*/		    
+		    colorsArrGroup.sort(function(a, b){return b.count-a.count});	    
+		    /*Showing the top color required*/
+		    $("#colors").append('<h3>Most used colors</h3>');
+		    for(var i = 0; i < colorsRequired; i++){		    	
+		    	$("#colors").append('<span class="color" style="background-color:'+rgbToHex(colorsArrGroup[i].obj.r,colorsArrGroup[i].obj.g,colorsArrGroup[i].obj.b)+'">'+colorsArrGroup[i].count+'</span>');	
+		    }		    	    
+		    $("#colors").append('<br/>');	
+		    //$("#colors").append('<span class="color" style="background-color:'+rgbToHex(aC.r,aC.g,aC.b)+'">'+temp.length+'</span>')
+			/*Custom code for converting image into given specified colors ends*/
+
+
+			/*Custom code for converting image into given specified colors starts*/
+			 var DC = [];
+			// console.log("colorsArrGroup : "+colorsArrGroup.length);
+			for(var i = 0; i < colorsArrGroup.length-1; i++)
+			{
+				var temp = [];
+				var count = 1;
+				temp.push(colorsArrGroup[i].obj);				
+				for(var j = i+1; j < colorsArrGroup.length; j++){
+					if(getDistance(colorsArrGroup[i].obj,colorsArrGroup[j].obj) <= nearColorMaxDiff){
+						temp.push(colorsArrGroup[j].obj);						
+					}		
+				}
+				// console.log("temp : "+temp.length);				
+				colorsArrGroup = colorsArrGroup.filter(function(item){
+					return temp.indexOf(item.obj)===-1;
+				});
+				// console.log("colorsArrGroup : "+colorsArrGroup.length);
+				i=0;				
+				var aC = getColorAverage(temp);//average color.
+				DC.push({aC:aC,count:temp.length});
+				//DC.push(temp[0]);
+				// showing colors used
+			    
+			    
+				if(DC.length==colorsRequired){
+					break;
+				}
+			}
+			console.log(DC);
+			/*Showing the top color required*/
+			DC.sort(function(a,b){
+				return b.count - a.count;
+			});			
+			/*Showing the top color required*/
+			$("#colors").append('<h3>Colors fetched after averaging.</h3>');
+		    for(var i = 0; i < colorsRequired; i++){		    	
+		    	var aC = DC[i].aC;
+		    	var count = DC[i].count;
+		    	$("#colors").append('<span class="color" style="background-color:'+rgbToHex(aC.r,aC.g,aC.b)+'">'+count+'</span>');		    
+		    }		    
+		    $("#colors").append('<br/>');
+		    DC = DC.map(function(item){
+				return item.aC;
+			});
+			// var DC = [
+			// 	{r:255,g:216,b:0},
+			// 	{r:255,g:0,b:0},
+			// 	{r:0,g:0,b:0},
+			// 	{r:255,g:255,b:131},
+			// 	{r:255,g:40,b:0},
+			// 	{r:21,g:189,b:0},
+			// 	{r:114,g:115,b:0},
+			// 	{r:255,g:130,b:0}
+			// ];//Desired colors
+			for(var i = 0; i < pixels.length; i+=4){						
+				var r = pixels[i];
+		        var g = pixels[i + 1];
+		        var b = pixels[i + 2];
+		        var a = pixels[i + 3];	
+		        var newColor = 0xffffff;
+		        var dist = 0xffffff;
+				for(var j = 0; j < DC.length; j++){
+					if(dist >= Math.sqrt(Math.pow(r-DC[j].r,2) + Math.pow(g-DC[j].g,2) +Math.pow(b-DC[j].b,2)))
+					{
+						dist = Math.sqrt(Math.pow(r-DC[j].r,2) + Math.pow(g-DC[j].g,2) +Math.pow(b-DC[j].b,2));
+						var dc = {r:DC[j].r,g:DC[j].g,b:DC[j].b};
+						newColor = dc;
+						dc.r = (DC[j].r);
+						dc.g = (DC[j].g);
+						dc.b = (DC[j].b);
+						//dc.a = (DC[j].a);
+					}					
+				}				
+						
+				/*Code for increasing the size of image by a given scale(not working properly on borders*/
+				/*Calculating new index of ith pixel according to the scale size
+					<code>(index of point(i))*(square of scale factor)</code>
+				*/				
+				var row = Math.ceil((i+1)/(image_obj.width*4));
+				var col = (i+1)%pixelW;		        
+		        var index = (row-1)*pixelW * Math.pow(scale,2) + (col-1)*scale;		        
+				/*Calculating new index of ith pixel according to the scale size for next rows
+				 	<code>(new index value(index) + (original width of image)*(incremental scale factor starting from 0)</code>
+				 */
+		        for (var x = 0; x < scale; x++) {
+		        	// for rows		        	
+		        	var rowIndex = index + (pixelW * scale * x);
+					for (var y = 0; y < scale; y++) {
+		        		// for columns			        	
+		        		var newIndex = rowIndex + (4 * y);
+
+		        		newImage.data[newIndex] = newColor.r;			  		
+				        newImage.data[newIndex + 1] = newColor.g;
+				        newImage.data[newIndex + 2] = newColor.b;
+				        newImage.data[newIndex + 3] = a;	
+					}		  		
+		        };		        
+		        /*Code for increasing the size of image by a given scale(not working properly on borders*/
+		   }			
+			/*Custom code for converting image into given specified colors ends*/
+
+			/*Custom code for converting image into specific color counts starts*/
+
+
+		    context2.clearRect(0, 0, canvas2.width, canvas2.height);
+		    context2.putImageData(newImage, 0, 0);
+
+
+		}
+
+		image_obj.src = './photography_quotes.jpg';
+	}
+
+	function getDistance(s,d){//source,destination
+		//console.log(s.r,d.r);
+		return Math.sqrt(Math.pow(s.r-d.r,2) + Math.pow(s.g-d.g,2) +Math.pow(s.b-d.b,2));
+	}
+	function isColorSame(s,d){
+		return s.r===d.r && s.g===d.g && s.b===d.b;
+	}
+	function getColorAverage(arr){
+		var r=0;
+		var b=0;
+		var g=0;
+		var a=0;
+		var count = arr.length;
+		for (var i = count - 1; i >= 0; i--) {
+			r += arr[i].r; 
+			b += arr[i].b; 
+			g += arr[i].g; 
+			a += arr[i].a; 
+		};
+		return {r:Math.floor(r/count),b:Math.floor(b/count),g:Math.floor(g/count),a:Math.floor(a/count)};
+	}
+
+	function componentToHex(c) {
+	    var hex = c.toString(16);
+	    return hex.length == 1 ? "0" + hex : hex;
+	}
+
+	function rgbToHex(r, g, b) {
+	    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+	}
+
+
+
+	</script>
+
+		<style>
+		.color{
+			width: 50px;
+			height: 50px;
+			display: inline-block;
+			margin-right: 5px;
+			border: 2px solid black;
+			text-align: center;
+			line-height: 3;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas1">		
+	</canvas>
+	<canvas id="canvas2">		
+	</canvas>
+	<div id="colors">		
+	</div>
+	</body>	
+</html>

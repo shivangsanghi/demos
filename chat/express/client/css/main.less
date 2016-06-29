@@ -1,0 +1,97 @@
+body{
+	height : 300px;
+	*{
+		box-sizing : border-box;
+	}
+}
+.container{
+	width : 100%;
+	height : 100%;
+	.message-box{
+		width : 60%;
+		height : 100%;
+		float : left;
+		padding : 5px;
+		background-color:#cccccc;
+		border : 1px solid #888888;
+		.all-messages{
+			width : 100%;
+			height : 90%;
+			overflow-y : auto;			
+			word-wrap: break-word;
+		}
+		.send-message{
+			width : 100%;
+			height : 10%;
+			overflow : hidden;
+			input{
+				height : 100%;
+				&:nth-child(1){
+					width: 85%;
+					float: left;					
+				}
+				&:nth-child(2){
+					float:right;
+					width : 15%;				
+				}
+			}
+		}		
+	}
+
+	.users-list{
+		float : right;
+		width : 20%;
+		height : 100%;
+		padding : 5px;
+		background-color:#BBBBBB;
+		border : 1px solid #666666;
+		word-wrap: break-word;
+		.user{
+			color : black;
+			cursor : pointer;	
+			&.selected{
+				background-color:#008800;
+			}		
+			&:even{
+				background-color:#FFFFFF;
+			}
+			&:odd{
+				background-color:#CCCCCC;
+			}
+		}
+	}
+
+	.rooms-list{
+		float : right;
+		width : 20%;
+		height : 100%;
+		padding : 5px;
+		background-color:#BBBBBB;
+		border : 1px solid #666666;
+		word-wrap: break-word;
+		.room{
+			color : black;
+			cursor : pointer;
+			min-height: 30px;
+			padding: 5px;	
+			&.selected{
+				background-color:#008800;
+			}		
+			&:even{
+				background-color:#FFFFFF;
+			}
+			&:odd{
+				background-color:#CCCCCC;
+			}
+			button{
+				float : right;
+				cursor : pointer;
+			}
+		}
+	}
+
+	.tools{
+		float: right;
+		margin-top: 10px;
+	}
+}

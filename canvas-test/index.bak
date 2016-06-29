@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript" src="jquery-2.1.1.min.js"></script>
+	<script type="text/javascript">
+	
+	window.onload = function(){		
+		var canvas1 = document.getElementById('canvas1');
+		var context1 = canvas1.getContext('2d');
+		var canvas2 = document.getElementById('canvas2');
+		var context2 = canvas2.getContext('2d');
+		var scale = 1;
+		var imageW = 0;//width of image
+		var imageH = 0;//height of image
+		var pixelW = 0;//number of element of imagedata in each row
+
+		var image_obj = new Image(); 
+		image_obj.onload = function(){
+			imageW = image_obj.width;
+			imageH = image_obj.height;
+			pixelW = imageW*4;//multiplied by 4 because imagedata contains 4 entry for each pixel
+			canvas1.width = imageW;
+			canvas1.height = imageH;
+			canvas2.width = imageW*scale;
+			canvas2.height = imageH*scale;
+
+
+
+			context1.drawImage(image_obj,0,0);
+			var arr = context1.getImageData(0, 0, imageW, imageH);
+
+			//var newImage = context2.createImageData(canvas2.width, canvas2.height);		    
+			var newImage = context2.createImageData(canvas2.width, canvas2.height);		    
+		    
+		    
+		    var pixels = arr.data;
+
+			/*Custom code for converting image into given specified colors starts*/
+			// var DC = [
+			// 	{r:255,g:216,b:0},
+			// 	{r:255,g:0,b:0},
+			// 	{r:0,g:0,b:0},
+			// 	{r:255,g:255,b:131},
+			// 	{r:255,g:40,b:0},
+			// 	{r:21,g:189,b:0},
+			// 	{r:114,g:115,b:0},
+			// 	{r:255,g:130,b:0}
+			// ];//Desired colors
+			// for(var i = 0; i < pixels.length; i+=4){						
+			// 	var r = pixels[i];
+		 //        var g = pixels[i + 1];
+		 //        var b = pixels[i + 2];
+		 //        var a = pixels[i + 3];	
+		 //        var newColor = 0xffffff;
+		 //        var dist = 0xffffff;
+			// 	for(var j = 0; j < DC.length; j++){
+			// 		if(dist >= Math.sqrt(Math.pow(r-DC[j].r,2) + Math.pow(g-DC[j].g,2) +Math.pow(b-DC[j].b,2)))
+			// 		{
+			// 			dist = Math.sqrt(Math.pow(r-DC[j].r,2) + Math.pow(g-DC[j].g,2) +Math.pow(b-DC[j].b,2));
+			// 			var dc = {r:DC[j].r,g:DC[j].g,b:DC[j].b};
+			// 			newColor = dc;
+			// 			dc.r = (DC[j].r);
+			// 			dc.g = (DC[j].g);
+			// 			dc.b = (DC[j].b);
+			// 		}					
+			// 	}
+			// 	newImage.data[i] = newColor.r;
+		 //        newImage.data[i + 1] = newColor.g;
+		 //        newImage.data[i + 2] = newColor.b;
+		 //        newImage.data[i + 3] = a;						
+						
+				/*Code for increasing the size of image by a given scale(not working properly on borders*/
+				/*Calculating new index of ith pixel according to the scale size
+					<code>(index of point(i))*(square of scale factor)</code>
+				*/				
+				// var row = Math.ceil((i+1)/(image_obj.width*4));
+				// var col = (i+1)%pixelW;		        
+		  //       var index = (row-1)*pixelW * Math.pow(scale,2) + (col-1)*scale;		        
+				// /*Calculating new index of ith pixel according to the scale size for next rows
+				// 	<code>(new index value(index) + (original width of image)*(incremental scale factor starting from 0)</code>
+				// */
+		  //       for (var x = 0; x < scale; x++) {
+		  //       	// for rows		        	
+		  //       	var rowIndex = index + (pixelW * scale * x);
+				// 	for (var y = 0; y < scale; y++) {
+		  //       		// for columns			        	
+		  //       		var newIndex = rowIndex + (4 * y);
+
+		  //       		newImage.data[newIndex] = newColor.r;			  		
+				//         newImage.data[newIndex + 1] = newColor.g;
+				//         newImage.data[newIndex + 2] = newColor.b;
+				//         newImage.data[newIndex + 3] = a;	
+				// 	}		  		
+		  //       };		        
+		        /*Code for increasing the size of image by a given scale(not working properly on borders*/
+		    }			
+			/*Custom code for converting image into given specified colors ends*/
+
+			/*Custom code for converting image into specific color counts starts*/
+
+			/*If there are 5 colors then we have to first calculate the distance*/
+			var colorsRequired = 5;
+			var colorsArr = [];
+			var distanceArr = [];
+
+			for(var i = 0; i < pixels.length; i+=4){
+				var r = pixels[i];
+		        var g = pixels[i + 1];
+		        var b = pixels[i + 2];
+		        var a = pixels[i + 3];	
+		        var newColor = 0xffffff;
+		        for(var j = 0; j < pixels.length; j++){
+		        	/*Calculating distance of ith pixel with each jth pixel other than ith*/
+					if(dist >= Math.sqrt(Math.pow(r-DC[j].r,2) + Math.pow(g-DC[j].g,2) +Math.pow(b-DC[j].b,2)))
+					{
+						dist = Math.sqrt(Math.pow(r-DC[j].r,2) + Math.pow(g-DC[j].g,2) +Math.pow(b-DC[j].b,2));
+						var dc = {r:DC[j].r,g:DC[j].g,b:DC[j].b};
+						newColor = dc;
+						dc.r = (DC[j].r);
+						dc.g = (DC[j].g);
+						dc.b = (DC[j].b);
+					}					
+				}
+		        newImage.data[i] = newColor.r;
+		        newImage.data[i + 1] = newColor.g;
+		        newImage.data[i + 2] = newColor.b;
+		        newImage.data[i + 3] = a;
+		    }			
+			/*Custom code for converting image into given specified colors ends*/
+
+
+
+		    context2.clearRect(0, 0, canvas2.width, canvas2.height);
+		    context2.putImageData(newImage, 0, 0);
+		}
+
+		image_obj.src = './png.png';
+	}
+	</script>
+</head>
+<body>
+	<span id='indexes'></span>
+	<canvas id="canvas1">		
+	</canvas>
+	<canvas id="canvas2">		
+	</canvas>
+	</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="chatApp">
+	<head>
+		<link rel="stylesheet" href="css/main.css">
+		<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+		
+		<script type="text/javascript" src="js/Constants.js"></script>
+		<script type="text/javascript" src="js/Services.js"></script>
+		<script type="text/javascript" src="js/Providers.js"></script>
+		<script type="text/javascript" src="js/Directives.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+	</head>	
+
+	<body ng-controller="MainController">
+		<div class="container">
+			<div class="message-box" ng-show="connected">				
+				<div class="all-messages" ng-bind-html="getTrustedHTML(messages)">
+				</div>
+				<div class="send-message">
+					<input type="text" on-enter="send" ng-model="message" ng-keyup="alert('hello')">						
+					<input type="button" value="Send" ng-click="send()">
+				</div>
+			</div>
+
+			<div class="users-list" ng-show="connected">
+				Users in room-{{selectedRoom.name}}({{users.length}}) : 
+				<div class="user" ng-class="{true:'selected'}[receiver==user]" ng-repeat="user in users" ng-click="selectReceiver(user)">
+					<b>{{user.userName}}</b>
+				</div>
+			</div>
+
+			<div class="rooms-list" ng-show="connected">
+				Available Rooms({{rooms.length}}) :
+				<div class="room" ng-class="{true:'selected'}[room==selectedRoom]" ng-repeat="room in rooms" ng-click="selectRoom(room)">
+					<b>{{room.name}}</b>
+					<button ng-click="moveToRoom(room,$event)" title="Move me to this room">Move</button>
+				</div>
+			</div>	
+			<span class="tools" ng-show="connected">
+				<button ng-click="disconnect()" title="Disconnect">Disconnect</button>
+				<button ng-click="receiver={}" title="Broadcast">Broadcast Message</button>
+			</span>
+			<div ng-show="!connected" class="" style="text-align: center;">
+  					<h1>Please login</h1>
+					<input type="text" on-enter="connect" ng-model="user.userName" class="ng-pristine ng-valid" placeholder="Enter your Nickname">						
+					<input type="button" value="Connect" ng-click="connect()">
+			</div>
+		</div>
+	</body>
+</html>
