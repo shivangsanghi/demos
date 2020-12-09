@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-12-09T13:42:32.019Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36" etag="wjoxWrkaB5ujn-LJQvuR" version="14.0.0" type="github" pages="4">
+<mxfile host="app.diagrams.net" modified="2020-12-09T13:43:44.657Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36" etag="mvRZGJ9QRPCrjsLLgKvd" version="14.0.0" type="github" pages="4">
   <diagram id="3kFzr8X6Iq4hm4kEnt4G" name="Admin: Available tables">
     <mxGraphModel dx="1186" dy="633" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -203,7 +203,7 @@
           <mxGeometry x="200" y="360" width="100" height="60" as="geometry" />
         </mxCell>
         <mxCell id="MJWeSKnUnLhXNs0pziLk-13" value="Show/Hide Cards" style="labelPosition=center;verticalLabelPosition=middle;align=center;html=1;shape=mxgraph.basic.shaded_button;dx=10;fillColor=#E6E6E6;strokeColor=none;fontSize=10;fontColor=#080808;" vertex="1" parent="MJWeSKnUnLhXNs0pziLk-1">
-          <mxGeometry x="370" y="525" width="100" height="60" as="geometry" />
+          <mxGeometry x="200" y="540" width="100" height="60" as="geometry" />
         </mxCell>
         <mxCell id="MJWeSKnUnLhXNs0pziLk-14" value="Chaal" style="labelPosition=center;verticalLabelPosition=middle;align=center;html=1;shape=mxgraph.basic.shaded_button;dx=10;fillColor=#E6E6E6;strokeColor=none;fontSize=10;fontColor=#080808;" vertex="1" parent="MJWeSKnUnLhXNs0pziLk-1">
           <mxGeometry x="200" y="460" width="100" height="60" as="geometry" />
@@ -222,6 +222,9 @@
         </mxCell>
         <mxCell id="MJWeSKnUnLhXNs0pziLk-19" value="Available Amount: 1000&lt;br&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=10;fontColor=#080808;" vertex="1" parent="MJWeSKnUnLhXNs0pziLk-1">
           <mxGeometry x="590" y="50" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="MJWeSKnUnLhXNs0pziLk-23" value="Leave Table" style="labelPosition=center;verticalLabelPosition=middle;align=center;html=1;shape=mxgraph.basic.shaded_button;dx=10;fillColor=#E6E6E6;strokeColor=none;fontSize=10;fontColor=#080808;" vertex="1" parent="MJWeSKnUnLhXNs0pziLk-1">
+          <mxGeometry x="370" y="540" width="100" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
